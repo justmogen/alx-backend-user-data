@@ -50,18 +50,18 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Return a connection to the MySQL database."""
+    """ Returns a connector to a MySQL database """
     username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
     password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
     host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = environ.get("PERSONAL_DATA_DB_NAME")
 
-    connector = mysql.connector.connection.MySQLConnection(
+    connecto = mysql.connector.connection.MySQLConnection(
         user=username,
         password=password,
         host=host,
         database=db_name)
-    return connector
+    return connecto
 
 
 def main():
@@ -73,14 +73,13 @@ def main():
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
+    field_names = [i[0] for i in cursor.description]
 
     logger = get_logger()
+
     for row in cursor:
-        msg = "name={}; email={}; phone={}; ssn={}; password={}; ip={};\
-                last_login={}; user_agent={}; ".format(
-            row[0], row[1], row[2], row[3], row[4], row[5],
-            row[6], row[7])
-        logger.info(msg)
+        str_row = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, field_names))
+        logger.info(str_row.strip())
 
     cursor.close()
     db.close()
