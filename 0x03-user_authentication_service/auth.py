@@ -8,6 +8,9 @@ import bcrypt
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 import uuid
+from typing import Union
+from bcrypt import hashpw, checkpw, gensalt
+from sqlalchemy.exc import InvalidRequestError
 
 
 def _hash_password(password: str) -> bytes:
