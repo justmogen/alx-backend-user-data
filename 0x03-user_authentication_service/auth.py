@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-""" Auth mmethod that takes in a password string arguments and 
-returns a byte string. 
+""" Auth mmethod that takes in a password string arguments and
+returns a byte string.
 """
 
 import bcrypt
